@@ -1,8 +1,8 @@
 #include <ESP8266WiFi.h>
 #include "FirebaseESP8266.h"
 
-#define FIREBASE_HOST "https://parkingdata-b7617.firebaseio.com/"
-#define FIREBASE_OAUTH "tgD4NjyoqkOdACT0x473u7O1hhWXUCoKiWTY0tZr"
+#define FIREBASE_HOST "https://else-rn-16505.firebaseio.com/"
+#define FIREBASE_OAUTH "KlIDLhGKnDTiB0ttooNCEA5Bto5NGLBsVQoCl4zU"
 
 // defines variables
 const char *ssid =  "375";     // replace with your wifi ssid and wpa2 key
@@ -35,6 +35,7 @@ void setup()
 }
 void loop() {
   // Clears the trigPin
+  Serial.println(Firebase.get(firebaseData,"threshold"));
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
   // Sets the trigPin on HIGH state for 10 micro seconds
@@ -54,10 +55,10 @@ void loop() {
    //if <200cm we consider that there is a car parked
     Firebase.begin(FIREBASE_HOST, FIREBASE_OAUTH);
     Firebase.reconnectWiFi(true);
-    Firebase.setString(firebaseData, "CarSlot1", "Occupied");
+    Firebase.setString(firebaseData, "CarSlot2", "1");
   } else {
     Firebase.begin(FIREBASE_HOST, FIREBASE_OAUTH);
     Firebase.reconnectWiFi(true);
-    Firebase.setString(firebaseData, "CarSlot2", "Vacant");
+    Firebase.setString(firebaseData, "CarSlot2", "0");
   }
 }
