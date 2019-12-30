@@ -1,8 +1,7 @@
 #include <ESP8266WiFi.h>
 #include "FirebaseESP8266.h"
-
-#define FIREBASE_HOST "https://else-rn-16505.firebaseio.com/"
-#define FIREBASE_OAUTH "KlIDLhGKnDTiB0ttooNCEA5Bto5NGLBsVQoCl4zU"
+#define FIREBASE_HOST "https://elseconsumerdatabase.firebaseio.com/"
+#define FIREBASE_OAUTH "HqBLu0LN9OMx7AcjiI6YeJaZNdPP8XUD0aY0RYMb"
 
 // defines variables
 const char *ssid =  "375";     // replace with your wifi ssid and wpa2 key
@@ -54,10 +53,10 @@ void loop() {
    //if <200cm we consider that there is a car parked
     Firebase.begin(FIREBASE_HOST, FIREBASE_OAUTH);
     Firebase.reconnectWiFi(true);
-    Firebase.setString(firebaseData, "CarSlot2", "1");
+    Firebase.setString(firebaseData, "unityOneRohini/parking/sensor1/value", "1");
   } else {
     Firebase.begin(FIREBASE_HOST, FIREBASE_OAUTH);
     Firebase.reconnectWiFi(true);
-    Firebase.setString(firebaseData, "CarSlot2", "0");
+    Firebase.setString(firebaseData, "unityOneRohini/parking/sensor1/value", "0");
   }
 }
