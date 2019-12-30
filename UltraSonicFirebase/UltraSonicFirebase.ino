@@ -53,10 +53,10 @@ void loop() {
    //if <200cm we consider that there is a car parked
     Firebase.begin(FIREBASE_HOST, FIREBASE_OAUTH);
     Firebase.reconnectWiFi(true);
-    Firebase.setString(firebaseData, "unityOneRohini/parking/sensor1/value", "1");
+    Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor2/value", 1);
   } else {
     Firebase.begin(FIREBASE_HOST, FIREBASE_OAUTH);
     Firebase.reconnectWiFi(true);
-    Firebase.setString(firebaseData, "unityOneRohini/parking/sensor1/value", "0");
+    Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor2/value", 0);
   }
 }
