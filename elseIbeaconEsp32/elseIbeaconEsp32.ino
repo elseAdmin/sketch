@@ -35,8 +35,8 @@ void setBeacon() {
   BLEBeacon oBeacon = BLEBeacon();
   oBeacon.setManufacturerId(0x4C00); // fake Apple 0x004C LSB (ENDIAN_CHANGE_U16!)
   oBeacon.setProximityUUID(BLEUUID(BEACON_UUID));
-  oBeacon.setMajor((0 & 0xFFFF0000) >> 16);
-  oBeacon.setMinor(0 & 0xFFFF);
+  oBeacon.setMajor(100);
+  oBeacon.setMinor(1);
   BLEAdvertisementData oAdvertisementData = BLEAdvertisementData();
   BLEAdvertisementData oScanResponseData = BLEAdvertisementData();
 
