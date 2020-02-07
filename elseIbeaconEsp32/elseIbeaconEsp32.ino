@@ -5,17 +5,17 @@
 #include "BLEBeacon.h"
 #include "time.h"
 
-#define FIREBASE_HOST "https://elseconsumerdatabase.firebaseio.com/" //Change to your Firebase RTDB project ID e.g. Your_Project_ID.firebaseio.com
-#define FIREBASE_AUTH "HqBLu0LN9OMx7AcjiI6YeJaZNdPP8XUD0aY0RYMb" //Change to your Firebase RTDB secret password
+#define FIREBASE_HOST "https://elseconsumerdatabase.firebaseio.com/"
+#define FIREBASE_AUTH "HqBLu0LN9OMx7AcjiI6YeJaZNdPP8XUD0aY0RYMb"
 #define WIFI_SSID "375"
 #define WIFI_PASSWORD "Whitepepper"
 const int trigPin = 2;
 const int echoPin = 5;
 bool isCar = false;
 FirebaseData firebaseData;
-long duration;
-int dist;
-time_t secondsSinceEpoch;
+long duration;                                      /////////// DONOT CHANGE any line of code 
+int dist;                                           /////////// ONLY uuid,major,minor and firebase path are allowed for updates
+time_t secondsSinceEpoch, lastHeartbeat;
 
 #ifdef __cplusplus
 extern "C" {
@@ -78,7 +78,8 @@ void setup() {
   Serial.println("Advertizing BLE started...");
   configTime(19800, 3600, "pool.ntp.org");
   secondsSinceEpoch = time(NULL);
-  Serial.println(secondsSinceEpoch);
+  lastHeartbeat = time(NULL);
+  Serial.print(lastHeartbeat);
 }
 
 void loop() {
@@ -106,5 +107,15 @@ void loop() {
     Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor5/updatedAt", secondsSinceEpoch);
     Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor5/value", 0);
     isCar = false;
+  }
+  heartBeat();
+  delay(100);
+}
+
+void heartBeat() {
+  time_t currentEpoch = time(NULL);
+  if (currentEpoch - lastHeartbeat > 900) { // heatbeat at 10 secs
+    lastHeartbeat = currentEpoch;
+    Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor5/heartbeat", currentEpoch);
   }
 }
