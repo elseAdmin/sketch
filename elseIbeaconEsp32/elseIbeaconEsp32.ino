@@ -13,7 +13,7 @@ const int trigPin = 2;
 const int echoPin = 5;
 bool isCar = false;
 FirebaseData firebaseData;
-long duration;                                      /////////// DONOT CHANGE any line of code 
+long duration;                                      /////////// DONOT CHANGE any line of code
 int dist;                                           /////////// ONLY uuid,major,minor and firebase path are allowed for updates
 time_t secondsSinceEpoch, lastHeartbeat;
 
@@ -35,7 +35,7 @@ void setBeacon() {
   BLEBeacon oBeacon = BLEBeacon();
   oBeacon.setManufacturerId(0x4C00); // fake Apple 0x004C LSB (ENDIAN_CHANGE_U16!)
   oBeacon.setProximityUUID(BLEUUID(BEACON_UUID));
-  oBeacon.setMajor(100);
+  oBeacon.setMajor(101);
   oBeacon.setMinor(1);
   BLEAdvertisementData oAdvertisementData = BLEAdvertisementData();
   BLEAdvertisementData oScanResponseData = BLEAdvertisementData();
@@ -79,34 +79,35 @@ void setup() {
   configTime(19800, 3600, "pool.ntp.org");
   secondsSinceEpoch = time(NULL);
   lastHeartbeat = time(NULL);
-  Serial.print(lastHeartbeat);
 }
 
 void loop() {
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
   digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10);
+  delayMicroseconds(2);
   digitalWrite(trigPin, LOW);
   duration = pulseIn(echoPin, HIGH);
-  dist = duration * 0.034 / 2;
-
-  if (dist < 30 && !isCar) {
-    Serial.println("detected a vehicle, updating firebase");
-    Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
-    Firebase.reconnectWiFi(true);
-    getCurrentMillis();
-    Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor5/updatedAt", secondsSinceEpoch);
-    Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor5/value", 1);
-    isCar = true;
-  } else if (dist >= 30 && isCar) {
-    Serial.println("no vehicle detected, updating firebase");
-    Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
-    Firebase.reconnectWiFi(true);
-    getCurrentMillis();
-    Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor5/updatedAt", secondsSinceEpoch);
-    Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor5/value", 0);
-    isCar = false;
+  dist = duration * 0.034 / 2; //dist is in cms
+  Serial.println(dist);
+  if (dist != 0) {
+    if (dist < 155 && !isCar) {
+      Serial.println("detected a vehicle, updating firebase");
+      Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
+      Firebase.reconnectWiFi(true);
+      getCurrentMillis();
+      Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor1/updatedAt", secondsSinceEpoch);
+      Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor1/value", 1);
+      isCar = true;
+    } else if (dist >= 155 && isCar) {
+      Serial.println("no vehicle detected, updating firebase");
+      Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
+      Firebase.reconnectWiFi(true);
+      getCurrentMillis();
+      Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor1/updatedAt", secondsSinceEpoch);
+      Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor1/value", 0);
+      isCar = false;
+    }
   }
   heartBeat();
   delay(100);
@@ -114,7 +115,7 @@ void loop() {
 
 void heartBeat() {
   time_t currentEpoch = time(NULL);
-  if (currentEpoch - lastHeartbeat > 900) { // heatbeat at 10 secs
+  if (currentEpoch - lastHeartbeat > 900) { // heatbeat at 900 secs
     lastHeartbeat = currentEpoch;
     Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor5/heartbeat", currentEpoch);
   }
