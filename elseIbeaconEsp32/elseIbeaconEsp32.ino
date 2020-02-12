@@ -36,7 +36,7 @@ void setBeacon() {
   oBeacon.setManufacturerId(0x4C00); // fake Apple 0x004C LSB (ENDIAN_CHANGE_U16!)
   oBeacon.setProximityUUID(BLEUUID(BEACON_UUID));
   oBeacon.setMajor(101);
-  oBeacon.setMinor(1);
+  oBeacon.setMinor(3);
   BLEAdvertisementData oAdvertisementData = BLEAdvertisementData();
   BLEAdvertisementData oScanResponseData = BLEAdvertisementData();
 
@@ -96,16 +96,16 @@ void loop() {
       Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
       Firebase.reconnectWiFi(true);
       getCurrentMillis();
-      Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor1/updatedAt", secondsSinceEpoch);
-      Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor1/value", 1);
+      Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor3/updatedAt", secondsSinceEpoch);
+      Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor3/value", 1);
       isCar = true;
     } else if (dist >= 155 && isCar) {
       Serial.println("no vehicle detected, updating firebase");
       Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
       Firebase.reconnectWiFi(true);
       getCurrentMillis();
-      Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor1/updatedAt", secondsSinceEpoch);
-      Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor1/value", 0);
+      Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor3/updatedAt", secondsSinceEpoch);
+      Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor3/value", 0);
       isCar = false;
     }
   }
