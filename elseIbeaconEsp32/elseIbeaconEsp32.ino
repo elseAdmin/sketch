@@ -35,8 +35,8 @@ void setBeacon() {
   BLEBeacon oBeacon = BLEBeacon();
   oBeacon.setManufacturerId(0x4C00); // fake Apple 0x004C LSB (ENDIAN_CHANGE_U16!)
   oBeacon.setProximityUUID(BLEUUID(BEACON_UUID));
-  oBeacon.setMajor(101);
-  oBeacon.setMinor(3);
+  oBeacon.setMajor(103);
+  oBeacon.setMinor(1);
   BLEAdvertisementData oAdvertisementData = BLEAdvertisementData();
   BLEAdvertisementData oScanResponseData = BLEAdvertisementData();
 
@@ -83,9 +83,9 @@ void setup() {
 
 void loop() {
   digitalWrite(trigPin, LOW);
-  delayMicroseconds(2);
+  delayMicroseconds(100);
   digitalWrite(trigPin, HIGH);
-  delayMicroseconds(2);
+  delayMicroseconds(100);
   digitalWrite(trigPin, LOW);
   duration = pulseIn(echoPin, HIGH);
   dist = duration * 0.034 / 2; //dist is in cms
@@ -96,16 +96,16 @@ void loop() {
       Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
       Firebase.reconnectWiFi(true);
       getCurrentMillis();
-      Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor3/updatedAt", secondsSinceEpoch);
-      Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor3/value", 1);
+      Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor9/updatedAt", secondsSinceEpoch);
+      Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor9/value", 1);
       isCar = true;
     } else if (dist >= 155 && isCar) {
       Serial.println("no vehicle detected, updating firebase");
       Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
       Firebase.reconnectWiFi(true);
       getCurrentMillis();
-      Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor3/updatedAt", secondsSinceEpoch);
-      Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor3/value", 0);
+      Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor9/updatedAt", secondsSinceEpoch);
+      Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor9/value", 0);
       isCar = false;
     }
   }
@@ -117,6 +117,6 @@ void heartBeat() {
   time_t currentEpoch = time(NULL);
   if (currentEpoch - lastHeartbeat > 900) { // heatbeat at 900 secs
     lastHeartbeat = currentEpoch;
-    Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor5/heartbeat", currentEpoch);
+    Firebase.setInt(firebaseData, "unityOneRohini/parking/sensor9/heartbeat", currentEpoch);
   }
 }
